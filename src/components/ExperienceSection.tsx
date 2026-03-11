@@ -57,7 +57,7 @@ const roles: Role[] = [
     ],
     aiContext: [
       { label: "SITUATION", text: "Rapid scaling pressure with constrained budgets. The organization was moving to public cloud faster than governance and standards could keep up." },
-      { label: "APPROACH", text: "Led through influence without authority in a matrixed organization — aligned stakeholders across security, finance, and application teams through shared outcomes rather than mandates." },
+      { label: "APPROACH", text: "Led through influence without authority in a matrixed organization, aligned stakeholders across security, finance, and application teams through shared outcomes rather than mandates." },
       { label: "TECHNICAL WORK", text: "Defined cloud architecture standards, security patterns, and DevOps practices that became the organizational baseline. Drove landing zone design and workload migration patterns." },
       { label: "LESSONS LEARNED", text: "\"In a matrixed org, your ability to lead through ambiguity matters more than your technical depth. People follow clarity, not credentials.\"" },
     ],
