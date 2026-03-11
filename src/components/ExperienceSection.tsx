@@ -36,7 +36,7 @@ const roles: Role[] = [
   {
     title: "Owner",
     context_label: "CloudTech LLC",
-    dates: "2020–Present",
+    dates: "2020-Present",
     bullets: [
       "Independent advisory practice focused on cloud strategy, AI enablement, and infrastructure leadership",
       "Engagements with enterprise clients on cloud architecture, DevOps transformation, and AI platform design",
