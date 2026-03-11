@@ -123,7 +123,7 @@ const WritingSection = () => {
                     onClick={() => window.open(a.postUrl!, '_blank', 'noopener,noreferrer')}
                     className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground"
                   >
-                    View on LinkedIn <ExternalLink className="h-3 w-3" />
+                    View Source Article <ExternalLink className="h-3 w-3" />
                   </button>
                 )}
               </div>
