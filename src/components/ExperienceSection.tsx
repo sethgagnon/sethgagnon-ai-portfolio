@@ -28,7 +28,7 @@ const roles: Role[] = [
     ],
     aiContext: [
       { label: "SITUATION", text: "No internal cloud consulting capability existed. The enterprise had fragmented cloud adoption with no centralized expertise, governance, or cost visibility." },
-      { label: "APPROACH", text: "Built credibility through a relationship-driven model — demonstrated results on a high-visibility initiative first, then scaled the function by proving value before asking for headcount." },
+      { label: "APPROACH", text: "Built credibility through a relationship-driven model. Demonstrated results on a high-visibility initiative first, then scaled the function by proving value before asking for headcount." },
       { label: "TECHNICAL WORK", text: "Stood up multi-cloud platform engineering across Azure and AWS. Co-led AI Council with governance layers spanning model selection, data privacy, cost allocation, and shared platform infrastructure." },
       { label: "LESSONS LEARNED", text: "\"The job is enablement, not gatekeeping. If teams see you as a bottleneck, you've already lost — no matter how right your architecture is.\"" },
     ],
