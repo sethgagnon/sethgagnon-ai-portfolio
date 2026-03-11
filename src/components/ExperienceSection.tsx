@@ -136,7 +136,7 @@ const ExperienceSection = () => (
   <section id="experience" className="mx-auto max-w-6xl px-6 py-24">
     <h2 className="font-heading text-4xl font-bold text-foreground">Experience</h2>
     <p className="mt-3 max-w-2xl text-muted-foreground" style={{ fontFamily: 'var(--font-body)' }}>
-      The real story behind the resume — ask the AI for deeper context on any of it.
+      The real story behind the resume. Ask the AI for deeper context on any of it.
     </p>
 
     <div className="mt-10 grid gap-6 md:grid-cols-2">
