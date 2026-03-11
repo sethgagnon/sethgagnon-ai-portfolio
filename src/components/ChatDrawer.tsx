@@ -111,7 +111,7 @@ const ChatDrawer = ({ open, onClose }: ChatDrawerProps) => {
                 }
               >
                 {msg.role === "assistant" ? (
-                  <div className="prose prose-sm dark:prose-invert max-w-none leading-relaxed">
+                  <div className="prose prose-sm prose-invert max-w-none leading-relaxed prose-p:text-foreground prose-strong:text-primary prose-li:text-foreground/90 prose-headings:text-foreground prose-ul:text-foreground/90 prose-a:text-primary">
                     <ReactMarkdown>{msg.content}</ReactMarkdown>
                   </div>
                 ) : (
