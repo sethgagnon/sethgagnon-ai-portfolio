@@ -65,7 +65,7 @@ const roles: Role[] = [
   {
     title: "Architecture Senior Advisor",
     context_label: "Same Enterprise",
-    dates: "2013–2020",
+    dates: "2013-2020",
     bullets: [
       "7.5 years driving DevOps standards and cloud adoption across a large regulated enterprise",
       "IBM Champion 2013–2016 for external contributions to the practitioner community",
