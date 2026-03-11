@@ -149,8 +149,8 @@ const ExperienceSection = () => (
     <div className="mt-12 glass-card rounded-xl p-6">
       <h3 className="font-heading text-lg font-semibold text-foreground mb-4">Education</h3>
       <div className="flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:gap-8">
-        <span>MS Technology Commercialization — Northeastern University</span>
-        <span>BS Management Information Systems — University of Connecticut</span>
+        <span>MS Technology Commercialization, Northeastern University</span>
+        <span>BS Management Information Systems, University of Connecticut</span>
       </div>
     </div>
 
