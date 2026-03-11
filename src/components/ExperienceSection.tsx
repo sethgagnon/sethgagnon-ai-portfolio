@@ -74,7 +74,7 @@ const roles: Role[] = [
       { label: "SITUATION", text: "Legacy-heavy enterprise in early stages of cloud adoption. Significant cultural and technical resistance to modern engineering practices." },
       { label: "APPROACH", text: "Drove DevOps standards across a large organization by combining grassroots advocacy with formal architecture governance, meeting teams where they were." },
       { label: "TECHNICAL WORK", text: "Built CI/CD pipelines, middleware modernization patterns, and early cloud-native reference architectures. Contributed tooling and practices back to the broader IBM practitioner community." },
-      { label: "LESSONS LEARNED", text: "\"Sustained community contribution isn't about self-promotion — it's about sharpening your own thinking by teaching others. The IBM Champion recognition was a byproduct, not the goal.\"" },
+      { label: "LESSONS LEARNED", text: "\"Sustained community contribution isn't about self-promotion. It's about sharpening your own thinking by teaching others. The IBM Champion recognition was a byproduct, not the goal.\"" },
     ],
   },
 ];
