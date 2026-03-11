@@ -141,7 +141,7 @@ export default function Admin() {
 
   return (
     <div className="min-h-screen bg-background p-6 max-w-4xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold text-foreground">Admin — Embeddings Pipeline</h1>
+      <h1 className="text-2xl font-bold text-foreground">Admin - Embeddings Pipeline</h1>
 
       {/* Sync Controls */}
       <Card>
