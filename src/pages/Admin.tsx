@@ -89,9 +89,10 @@ export default function Admin() {
         `✅ Synced "${source}": ${data.counts.deleted} deleted, ${data.counts.inserted} inserted`
       );
       toast({ title: "Sync complete", description: `${data.counts.inserted} chunks inserted` });
-    } catch (err: any) {
-      setSyncResult(`❌ Error: ${err.message}`);
-      toast({ title: "Sync failed", description: err.message, variant: "destructive" });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Unknown error";
+      setSyncResult(`❌ Error: ${msg}`);
+      toast({ title: "Sync failed", description: msg, variant: "destructive" });
     } finally {
       setSyncing(null);
     }
