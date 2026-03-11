@@ -20,7 +20,7 @@ const suggestions = [
   "What does Seth do?",
   "What are Seth's strongest skills?",
   "Where does Seth have gaps?",
-  "What has Seth written about AI governance?",
+  "What has Seth written about AI?",
   "Tell me about the At Scale newsletter.",
   "What kind of role is Seth looking for?",
 ];
