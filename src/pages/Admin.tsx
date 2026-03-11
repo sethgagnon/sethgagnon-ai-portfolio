@@ -151,10 +151,10 @@ export default function Admin() {
         <CardContent className="space-y-4">
           <div className="flex flex-wrap gap-3">
             <Button
-              onClick={() => handleSync("ai-context")}
+              onClick={() => handleSync("ai_context")}
               disabled={!!syncing}
             >
-              {syncing === "ai-context" ? "Syncing…" : "Sync AI Context"}
+              {syncing === "ai_context" ? "Syncing…" : "Sync AI Context"}
             </Button>
             <Button
               onClick={() => handleSync("newsletter")}
