@@ -38,11 +38,11 @@ const HeroSection = ({ onOpenChat }: HeroSectionProps) => (
     </div>
 
     {/* CTAs */}
-    <div className="mt-10 flex flex-wrap justify-center gap-4">
-      <Button onClick={onOpenChat} size="lg" className="gap-2 text-base">
+    <div className="mt-10 flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-center">
+      <Button onClick={onOpenChat} size="lg" className="w-full gap-2 text-base sm:w-auto">
         <MessageCircle className="h-5 w-5" /> Ask AI About Me
       </Button>
-      <Button variant="outline" size="lg" asChild className="text-base">
+      <Button variant="outline" size="lg" asChild className="w-full text-base sm:w-auto">
         <a href="#writing">Read At Scale</a>
       </Button>
     </div>
