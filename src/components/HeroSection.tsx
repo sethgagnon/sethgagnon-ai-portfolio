@@ -8,8 +8,8 @@ interface HeroSectionProps {
 
 const credentials = ["AWS", "Azure", "GCP", "OCI", "IBM Champion", "At Scale Newsletter"];
 
-const HeroSection = ({ onOpenChat }: HeroSectionProps) => (
-  <section className="relative flex min-h-screen flex-col items-center justify-center px-6 pt-20 text-center">
+const HeroSection = ({ onOpenChat }: HeroSectionProps) =>
+<section className="relative flex min-h-screen flex-col items-center justify-center px-6 pt-20 text-center">
     {/* Status badge */}
     <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-2 text-sm text-primary">
       <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
@@ -24,17 +24,17 @@ const HeroSection = ({ onOpenChat }: HeroSectionProps) => (
       Cloud Engineering Director | Enterprise AI Strategist
     </p>
 
-    <p className="mt-6 max-w-2xl text-lg text-muted-foreground" style={{ fontFamily: 'var(--font-body)' }}>
-      20+ years leading technology inside large regulated enterprises. Writing about what it actually takes to make AI work at scale.
-    </p>
+    <p className="mt-6 max-w-2xl text-lg text-muted-foreground" style={{ fontFamily: 'var(--font-body)' }}>20+ years leading technology inside large regulated enterprises. Writing about what it actually takes to make Cloud & AI work at scale.
+
+  </p>
 
     {/* Credential pills */}
     <div className="mt-8 flex flex-wrap justify-center gap-2">
-      {credentials.map((c) => (
-        <Badge key={c} variant="outline" className="border-border bg-muted/50 text-muted-foreground text-xs px-3 py-1">
+      {credentials.map((c) =>
+    <Badge key={c} variant="outline" className="border-border bg-muted/50 text-muted-foreground text-xs px-3 py-1">
           {c}
         </Badge>
-      ))}
+    )}
     </div>
 
     {/* CTAs */}
@@ -51,7 +51,7 @@ const HeroSection = ({ onOpenChat }: HeroSectionProps) => (
     <div className="absolute bottom-10 animate-bounce text-muted-foreground">
       <ChevronDown className="h-6 w-6" />
     </div>
-  </section>
-);
+  </section>;
+
 
 export default HeroSection;
