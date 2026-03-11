@@ -7,7 +7,7 @@ const Footer = () => (
       <p className="mt-1 text-sm text-muted-foreground">Cloud Engineering Director | Enterprise AI Strategist</p>
 
       <div className="mt-6 flex justify-center gap-6">
-        <a href="#" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+        <a href="https://www.linkedin.com/in/sethgagnon/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground" onClick={(e) => { e.preventDefault(); window.open('https://www.linkedin.com/in/sethgagnon/', '_blank'); }}>
           <Linkedin className="h-4 w-4" /> LinkedIn
         </a>
         <a href="#" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
