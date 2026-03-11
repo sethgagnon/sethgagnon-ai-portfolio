@@ -151,6 +151,7 @@ const ExperienceSection = () => (
       <div className="flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:gap-8">
         <span>MS Technology Commercialization, Northeastern University</span>
         <span>BS Management Information Systems, University of Connecticut</span>
+        <span>Generative AI: Technology, Business, and Society Certificate, Stanford University</span>
       </div>
     </div>
 
