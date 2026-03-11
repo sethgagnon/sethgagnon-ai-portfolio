@@ -36,7 +36,7 @@ const FitAssessmentSection = () => {
     <section id="fit-check" className="mx-auto max-w-6xl px-6 py-24">
       <h2 className="font-heading text-4xl font-bold text-foreground">Honest Fit Assessment</h2>
       <p className="mt-3 max-w-2xl text-muted-foreground" style={{ fontFamily: 'var(--font-body)' }}>
-        Paste a job description. Get an honest assessment of whether I'm the right person — including when I'm not.
+        Paste a job description. Get an honest assessment of whether I'm the right person, including when I'm not.
       </p>
 
       {/* Demo toggles */}
