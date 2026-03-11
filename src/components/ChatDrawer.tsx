@@ -74,12 +74,7 @@ const ChatDrawer = ({ open, onClose }: ChatDrawerProps) => {
     <Sheet open={open} onOpenChange={(v) => !v && onClose()}>
       <SheetContent side="right" className="flex w-full flex-col bg-background p-0 sm:max-w-md">
         <SheetHeader className="border-b border-border p-4">
-          <div className="flex items-center justify-between">
-            <SheetTitle className="font-heading text-lg">Ask AI About Seth</SheetTitle>
-            <button onClick={onClose} className="text-muted-foreground hover:text-foreground">
-              <X className="h-5 w-5" />
-            </button>
-          </div>
+          <SheetTitle className="font-heading text-lg">Ask AI About Seth</SheetTitle>
         </SheetHeader>
 
         {/* Messages */}
