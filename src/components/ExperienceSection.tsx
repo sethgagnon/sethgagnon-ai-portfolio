@@ -50,7 +50,7 @@ const roles: Role[] = [
   {
     title: "Cloud Platform Lead / Senior Manager",
     context_label: "Same Enterprise",
-    dates: "2020–2022",
+    dates: "2020-2022",
     bullets: [
       "Led cloud platform engineering team through rapid scaling of enterprise public cloud adoption",
       "Established cloud architecture standards, security patterns, and DevOps practices across the organization",
