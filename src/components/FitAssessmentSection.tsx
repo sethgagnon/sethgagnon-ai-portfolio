@@ -18,7 +18,7 @@ const sampleOutput = {
     "Co-led enterprise AI Council, strong alignment with AI/ML platform adoption mandate",
   ],
   gaps: [
-    "Haven't held the exact VP title yet — current scope is Director-level with VP-adjacent responsibilities",
+    "Haven't held the exact VP title yet. Current scope is Director-level with VP-adjacent responsibilities",
   ],
   recommendation: "I'd take this conversation seriously. The scope matches, the domain matches, and I bring practitioner depth that most candidates at this level have traded for breadth. Let's talk.",
 };
