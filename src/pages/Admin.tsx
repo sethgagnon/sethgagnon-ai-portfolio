@@ -108,8 +108,9 @@ export default function Admin() {
       });
       if (error) throw error;
       setSearchResults(data.results || []);
-    } catch (err: any) {
-      toast({ title: "Search failed", description: err.message, variant: "destructive" });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Unknown error";
+      toast({ title: "Search failed", description: msg, variant: "destructive" });
     } finally {
       setSearching(false);
     }
