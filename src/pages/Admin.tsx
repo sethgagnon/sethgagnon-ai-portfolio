@@ -81,7 +81,7 @@ export default function Admin() {
     setSyncing(source);
     setSyncResult(null);
     try {
-      const { data, error } = await supabase.functions.invoke("embed-and-sync", {
+      const { data, error } = await supabase.functions.invoke("ingest-documents", {
         body: { source },
       });
       if (error) throw error;
