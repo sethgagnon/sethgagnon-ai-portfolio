@@ -156,7 +156,7 @@ const ExperienceSection = () => (
 
     {/* Recognition */}
     <div className="mt-6 flex flex-wrap gap-2">
-      {["IBM Champion 2013–2016", "2024 Timmy Awards Finalist, Best Tech Manager", "Microsoft Certified: Azure Fundamentals"].map((r) => (
+      {["IBM Champion 2013-2016", "2024 Timmy Awards Finalist, Best Tech Manager", "Microsoft Certified: Azure Fundamentals"].map((r) => (
         <Badge key={r} variant="outline" className="border-border text-muted-foreground text-xs">{r}</Badge>
       ))}
     </div>

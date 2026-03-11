@@ -16,7 +16,7 @@ const Footer = () => (
       </div>
 
       <p className="mt-6 text-xs text-muted-foreground">
-        AI-queryable portfolio — ask the AI anything about my background
+        AI-queryable portfolio. Ask the AI anything about my background
       </p>
       <p className="mt-2 text-xs text-muted-foreground/60">© 2026 Seth Gagnon</p>
     </div>

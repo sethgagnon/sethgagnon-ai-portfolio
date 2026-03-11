@@ -203,7 +203,7 @@ export default function Admin() {
                 >
                   <div className="flex justify-between items-center">
                     <span className="text-xs font-mono text-muted-foreground">
-                      #{i + 1} — similarity: {(result.similarity * 100).toFixed(1)}%
+                      #{i + 1} - similarity: {(result.similarity * 100).toFixed(1)}%
                     </span>
                     <span className="text-xs bg-muted px-2 py-0.5 rounded text-muted-foreground">
                       {(result.metadata as any)?.source}

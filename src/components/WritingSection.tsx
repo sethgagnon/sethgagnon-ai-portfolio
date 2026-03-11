@@ -21,7 +21,7 @@ const WritingSection = () => {
       <h2 className="font-heading text-4xl font-bold text-foreground">At Scale</h2>
       <p className="mt-3 max-w-2xl text-muted-foreground" style={{ fontFamily: "var(--font-body)" }}>
         A newsletter for infrastructure and engineering leaders navigating enterprise AI adoption.
-        Real practitioner perspective — not vendor content.
+        Real practitioner perspective, not vendor content.
       </p>
 
       {/* Tag filter bar */}

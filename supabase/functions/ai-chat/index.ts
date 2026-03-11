@@ -60,7 +60,7 @@ Deno.serve(async (req) => {
     const embData = await embRes.json();
     const queryEmbedding = embData.data[0].embedding;
 
-    // 2. Vector similarity search — top 8 chunks
+    // 2. Vector similarity search - top 8 chunks
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
     const { data: chunks, error: searchError } = await supabase.rpc('match_documents', {
       query_embedding: JSON.stringify(queryEmbedding),

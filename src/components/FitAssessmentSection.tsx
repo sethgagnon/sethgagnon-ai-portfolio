@@ -93,7 +93,7 @@ const FitAssessmentSection = () => {
       {/* Philosophy callout */}
       <div className="mt-8 rounded-xl border border-border/50 bg-muted/20 p-5">
         <p className="text-sm text-muted-foreground italic">
-          "This isn't a cover letter. It's a mutual qualification. Your time is valuable — so is mine."
+          "This isn't a cover letter. It's a mutual qualification. Your time is valuable, so is mine."
         </p>
       </div>
     </section>
