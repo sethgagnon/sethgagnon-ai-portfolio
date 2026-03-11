@@ -42,9 +42,9 @@ const roles: Role[] = [
       "Engagements with enterprise clients on cloud architecture, DevOps transformation, and AI platform design",
     ],
     aiContext: [
-      { label: "SITUATION", text: "Most AI strategy discourse comes from vendors or analysts — there's a gap for the practitioner perspective, someone who's actually building and operating these systems inside enterprises." },
-      { label: "APPROACH", text: "Launched the At Scale newsletter and advisory practice grounded in real operating experience — bridging the gap between executive AI ambition and engineering reality." },
-      { label: "LESSONS LEARNED", text: "\"Writing from the inside — while you're still doing the work — carries a credibility that no amount of retrospective thought leadership can match.\"" },
+      { label: "SITUATION", text: "Most AI strategy discourse comes from vendors or analysts. There's a gap for the practitioner perspective, someone who's actually building and operating these systems inside enterprises." },
+      { label: "APPROACH", text: "Launched the At Scale newsletter and advisory practice grounded in real operating experience, bridging the gap between executive AI ambition and engineering reality." },
+      { label: "LESSONS LEARNED", text: "\"Writing from the inside, while you're still doing the work, carries a credibility that no amount of retrospective thought leadership can match.\"" },
     ],
   },
   {
