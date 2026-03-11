@@ -144,7 +144,7 @@ const ChatDrawer = ({ open, onClose }: ChatDrawerProps) => {
             className="bg-muted/30"
             disabled={isLoading}
           />
-          <Button type="submit" size="icon" className="shrink-0" disabled={isLoading || !input.trim()}>
+          <Button type="submit" size="icon" className="shrink-0" disabled={isLoading || !input.trim()} aria-label="Send message">
             <Send className="h-4 w-4" />
           </Button>
         </form>
