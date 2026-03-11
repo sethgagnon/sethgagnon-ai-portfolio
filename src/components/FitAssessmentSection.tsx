@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 
-const strongFitJD = `VP of Cloud Engineering — Fortune 500 Healthcare Company
+const strongFitJD = `VP of Cloud Engineering - Fortune 500 Healthcare Company
 Lead enterprise cloud strategy across AWS and Azure. Build and manage a team of 15+ cloud engineers. Drive AI/ML platform adoption. Partner with security and compliance teams. 10+ years in enterprise technology leadership required.`;
 
 const weakFitJD = `Head of Mobile Engineering — Series B Consumer Fintech
