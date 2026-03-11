@@ -68,7 +68,7 @@ const roles: Role[] = [
     dates: "2013-2020",
     bullets: [
       "7.5 years driving DevOps standards and cloud adoption across a large regulated enterprise",
-      "IBM Champion 2013–2016 for external contributions to the practitioner community",
+      "IBM Champion 2013-2016 for external contributions to the practitioner community",
     ],
     aiContext: [
       { label: "SITUATION", text: "Legacy-heavy enterprise in early stages of cloud adoption. Significant cultural and technical resistance to modern engineering practices." },
