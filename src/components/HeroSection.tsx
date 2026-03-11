@@ -1,6 +1,7 @@
 import { MessageCircle, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 interface HeroSectionProps {
   onOpenChat: () => void;
@@ -15,6 +16,12 @@ const HeroSection = ({ onOpenChat }: HeroSectionProps) =>
       <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
       Open to VP / Director roles at enterprise-scale organizations
     </div>
+
+    {/* Profile photo */}
+    <Avatar className="mb-6 h-32 w-32 border-2 border-primary/20">
+      <AvatarImage src="/seth-gagnon.jpg" alt="Seth Gagnon" />
+      <AvatarFallback className="text-3xl font-bold bg-muted text-muted-foreground">SG</AvatarFallback>
+    </Avatar>
 
     <h1 className="font-heading text-5xl font-bold tracking-tight text-foreground sm:text-7xl">
       Seth Gagnon
