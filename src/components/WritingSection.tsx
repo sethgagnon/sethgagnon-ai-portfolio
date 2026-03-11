@@ -119,14 +119,12 @@ const WritingSection = () => {
                   Read more
                 </button>
                 {a.postUrl && (
-                  <a
-                    href={a.postUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    onClick={() => window.open(a.postUrl!, '_blank', 'noopener,noreferrer')}
                     className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground"
                   >
                     View on LinkedIn <ExternalLink className="h-3 w-3" />
-                  </a>
+                  </button>
                 )}
               </div>
             </article>
