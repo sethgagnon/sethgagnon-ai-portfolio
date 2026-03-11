@@ -20,7 +20,7 @@ const roles: Role[] = [
   {
     title: "Cloud Engineering Director",
     context_label: "Large Regulated Enterprise, Health Services",
-    dates: "2022–Present",
+    dates: "2022-Present",
     bullets: [
       "Built and scaled a cloud consulting function from zero to 12+ engineers, now expanding to include Cloud AI services",
       "Co-led formation of an enterprise AI Council, establishing governance, operating model, and shared platform infrastructure",
