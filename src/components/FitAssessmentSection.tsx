@@ -14,8 +14,8 @@ const sampleOutput = {
   reasoning: "This role maps directly to my current scope and trajectory. I've built cloud functions at this scale inside regulated healthcare, co-led AI governance, and managed the kind of cross-functional alignment this position demands.",
   fit: [
     "20+ years enterprise technology leadership in regulated environments (healthcare specifically)",
-    "Built cloud consulting function from zero to 12+ engineers — directly mirrors the team-building requirement",
-    "Co-led enterprise AI Council — strong alignment with AI/ML platform adoption mandate",
+    "Built cloud consulting function from zero to 12+ engineers, directly mirrors the team-building requirement",
+    "Co-led enterprise AI Council, strong alignment with AI/ML platform adoption mandate",
   ],
   gaps: [
     "Haven't held the exact VP title yet — current scope is Director-level with VP-adjacent responsibilities",
