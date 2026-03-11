@@ -77,14 +77,12 @@ const ArticleDetail = ({ articleId, title, date, tags, postUrl, onClose }: Artic
 
         {postUrl && (
           <div className="mt-6 pt-4 border-t border-border">
-            <a
-              href={postUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => window.open(postUrl!, '_blank', 'noopener,noreferrer')}
               className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
             >
               Read on LinkedIn <ExternalLink className="h-3.5 w-3.5" />
-            </a>
+            </button>
           </div>
         )}
       </DialogContent>
