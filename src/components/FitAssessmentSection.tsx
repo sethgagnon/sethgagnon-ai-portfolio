@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 
-const strongFitJD = `VP of Cloud Engineering — Fortune 500 Healthcare Company
+const strongFitJD = `VP of Cloud Engineering - Fortune 500 Healthcare Company
 Lead enterprise cloud strategy across AWS and Azure. Build and manage a team of 15+ cloud engineers. Drive AI/ML platform adoption. Partner with security and compliance teams. 10+ years in enterprise technology leadership required.`;
 
-const weakFitJD = `Head of Mobile Engineering — Series B Consumer Fintech
+const weakFitJD = `Head of Mobile Engineering - Series B Consumer Fintech
 Lead mobile engineering for our flagship iOS/Android app. Ship weekly releases to 2M+ users. Build and scale a team of mobile engineers. Deep expertise in React Native or Flutter required.`;
 
 const sampleOutput = {
@@ -14,11 +14,11 @@ const sampleOutput = {
   reasoning: "This role maps directly to my current scope and trajectory. I've built cloud functions at this scale inside regulated healthcare, co-led AI governance, and managed the kind of cross-functional alignment this position demands.",
   fit: [
     "20+ years enterprise technology leadership in regulated environments (healthcare specifically)",
-    "Built cloud consulting function from zero to 12+ engineers — directly mirrors the team-building requirement",
-    "Co-led enterprise AI Council — strong alignment with AI/ML platform adoption mandate",
+    "Built cloud consulting function from zero to 12+ engineers, directly mirrors the team-building requirement",
+    "Co-led enterprise AI Council, strong alignment with AI/ML platform adoption mandate",
   ],
   gaps: [
-    "Haven't held the exact VP title yet — current scope is Director-level with VP-adjacent responsibilities",
+    "Haven't held the exact VP title yet. Current scope is Director-level with VP-adjacent responsibilities",
   ],
   recommendation: "I'd take this conversation seriously. The scope matches, the domain matches, and I bring practitioner depth that most candidates at this level have traded for breadth. Let's talk.",
 };
@@ -36,7 +36,7 @@ const FitAssessmentSection = () => {
     <section id="fit-check" className="mx-auto max-w-6xl px-6 py-24">
       <h2 className="font-heading text-4xl font-bold text-foreground">Honest Fit Assessment</h2>
       <p className="mt-3 max-w-2xl text-muted-foreground" style={{ fontFamily: 'var(--font-body)' }}>
-        Paste a job description. Get an honest assessment of whether I'm the right person — including when I'm not.
+        Paste a job description. Get an honest assessment of whether I'm the right person, including when I'm not.
       </p>
 
       {/* Demo toggles */}
@@ -93,7 +93,7 @@ const FitAssessmentSection = () => {
       {/* Philosophy callout */}
       <div className="mt-8 rounded-xl border border-border/50 bg-muted/20 p-5">
         <p className="text-sm text-muted-foreground italic">
-          "This isn't a cover letter. It's a mutual qualification. Your time is valuable — so is mine."
+          "This isn't a cover letter. It's a mutual qualification. Your time is valuable, so is mine."
         </p>
       </div>
     </section>

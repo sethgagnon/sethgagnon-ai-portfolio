@@ -141,7 +141,7 @@ export default function Admin() {
 
   return (
     <div className="min-h-screen bg-background p-6 max-w-4xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold text-foreground">Admin — Embeddings Pipeline</h1>
+      <h1 className="text-2xl font-bold text-foreground">Admin - Embeddings Pipeline</h1>
 
       {/* Sync Controls */}
       <Card>
@@ -203,7 +203,7 @@ export default function Admin() {
                 >
                   <div className="flex justify-between items-center">
                     <span className="text-xs font-mono text-muted-foreground">
-                      #{i + 1} — similarity: {(result.similarity * 100).toFixed(1)}%
+                      #{i + 1} - similarity: {(result.similarity * 100).toFixed(1)}%
                     </span>
                     <span className="text-xs bg-muted px-2 py-0.5 rounded text-muted-foreground">
                       {(result.metadata as any)?.source}
