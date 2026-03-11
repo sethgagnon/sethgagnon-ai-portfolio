@@ -25,6 +25,24 @@ interface ArticleDetailProps {
 const ArticleDetail = ({ articleId, title, date, tags, postUrl, onClose }: ArticleDetailProps) => {
   const { data: content, isLoading, error, refetch } = useArticleDetail(articleId);
 
+  // Dynamic SEO: update document title and meta description when article opens
+  useEffect(() => {
+    if (!articleId) return;
+    const prevTitle = document.title;
+    document.title = `${title} | Seth Gagnon`;
+
+    const metaDesc = document.querySelector('meta[name="description"]');
+    const prevDesc = metaDesc?.getAttribute("content") ?? "";
+    if (metaDesc) {
+      metaDesc.setAttribute("content", `${title} — At Scale newsletter by Seth Gagnon`);
+    }
+
+    return () => {
+      document.title = prevTitle;
+      if (metaDesc) metaDesc.setAttribute("content", prevDesc);
+    };
+  }, [articleId, title]);
+
   return (
     <Dialog open={!!articleId} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto bg-card border-border">

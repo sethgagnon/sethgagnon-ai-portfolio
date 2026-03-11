@@ -7,6 +7,7 @@ import SkillsSection from "@/components/SkillsSection";
 import FitAssessmentSection from "@/components/FitAssessmentSection";
 import ChatDrawer from "@/components/ChatDrawer";
 import Footer from "@/components/Footer";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 const Index = () => {
   const [chatOpen, setChatOpen] = useState(false);
@@ -15,10 +16,18 @@ const Index = () => {
     <div className="min-h-screen overflow-x-hidden bg-background">
       <NavBar onOpenChat={() => setChatOpen(true)} />
       <HeroSection onOpenChat={() => setChatOpen(true)} />
-      <WritingSection />
-      <ExperienceSection />
-      <SkillsSection />
-      <FitAssessmentSection />
+      <ErrorBoundary>
+        <WritingSection />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <ExperienceSection />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <SkillsSection />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <FitAssessmentSection />
+      </ErrorBoundary>
       <Footer />
       <ChatDrawer open={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
