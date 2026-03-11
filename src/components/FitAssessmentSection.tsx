@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 const strongFitJD = `VP of Cloud Engineering - Fortune 500 Healthcare Company
 Lead enterprise cloud strategy across AWS and Azure. Build and manage a team of 15+ cloud engineers. Drive AI/ML platform adoption. Partner with security and compliance teams. 10+ years in enterprise technology leadership required.`;
 
-const weakFitJD = `Head of Mobile Engineering — Series B Consumer Fintech
+const weakFitJD = `Head of Mobile Engineering - Series B Consumer Fintech
 Lead mobile engineering for our flagship iOS/Android app. Ship weekly releases to 2M+ users. Build and scale a team of mobile engineers. Deep expertise in React Native or Flutter required.`;
 
 const sampleOutput = {
