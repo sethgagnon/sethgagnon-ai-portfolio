@@ -12,8 +12,8 @@ const credentials = ["AWS", "Azure", "GCP", "OCI", "IBM Champion", "At Scale New
 const HeroSection = ({ onOpenChat }: HeroSectionProps) =>
 <section className="relative flex min-h-screen flex-col items-center justify-center px-6 pt-20 text-center">
     {/* Status badge */}
-    <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-2 text-sm text-primary">
-      <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+    <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-2 text-sm text-primary">Open to VP / Director level technology leadership roles
+    <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
       Open to VP / Director roles at enterprise-scale organizations
     </div>
 
