@@ -7,7 +7,7 @@ interface HeroSectionProps {
   onOpenChat: () => void;
 }
 
-const credentials = ["AWS", "Azure", "GCP", "OCI", "IBM Champion", "At Scale Newsletter"];
+const credentials = ["AWS", "Azure", "GCP", "OCI", "At Scale Newsletter"];
 
 const HeroSection = ({ onOpenChat }: HeroSectionProps) =>
 <section className="relative flex min-h-screen flex-col items-center justify-center px-6 pt-20 text-center">
