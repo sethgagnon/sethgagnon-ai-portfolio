@@ -38,7 +38,6 @@ const tools = [
     featured: false,
     invertLogo: true,
   },
-  },
 ];
 
 const AIToolsSection = () => (
