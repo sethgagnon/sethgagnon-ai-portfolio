@@ -3,6 +3,7 @@ import lovableLogo from "@/assets/tools/lovable.png";
 import cursorLogo from "@/assets/tools/cursor.svg";
 import kiroLogo from "@/assets/tools/kiro.svg";
 import copilotLogo from "@/assets/tools/copilot.png";
+import openaiLogo from "@/assets/tools/openai.png";
 
 const tools = [
   {
@@ -28,6 +29,12 @@ const tools = [
     name: "Microsoft Copilot",
     descriptor: "AI Assistant",
     logo: copilotLogo,
+    featured: false,
+  },
+  {
+    name: "OpenAI",
+    descriptor: "AI Research & APIs",
+    logo: openaiLogo,
     featured: false,
   },
 ];
