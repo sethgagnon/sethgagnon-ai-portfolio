@@ -4,6 +4,7 @@ import HeroSection from "@/components/HeroSection";
 import WritingSection from "@/components/WritingSection";
 import ExperienceSection from "@/components/ExperienceSection";
 import SkillsSection from "@/components/SkillsSection";
+import AIToolsSection from "@/components/AIToolsSection";
 import FitAssessmentSection from "@/components/FitAssessmentSection";
 import ChatDrawer from "@/components/ChatDrawer";
 import Footer from "@/components/Footer";
@@ -24,6 +25,9 @@ const Index = () => {
       </ErrorBoundary>
       <ErrorBoundary>
         <SkillsSection />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <AIToolsSection />
       </ErrorBoundary>
       <ErrorBoundary>
         <FitAssessmentSection />
