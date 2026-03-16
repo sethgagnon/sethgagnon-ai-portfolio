@@ -4,6 +4,7 @@ import cursorLogo from "@/assets/tools/cursor.svg";
 import kiroLogo from "@/assets/tools/kiro.svg";
 import copilotLogo from "@/assets/tools/copilot.png";
 import openaiLogo from "@/assets/tools/openai.png";
+import claudeLogo from "@/assets/tools/claude.png";
 
 const tools = [
   {
@@ -38,6 +39,12 @@ const tools = [
     featured: false,
     invertLogo: true,
   },
+  {
+    name: "Claude",
+    descriptor: "AI Assistant",
+    logo: claudeLogo,
+    featured: false,
+  },
 ];
 
 const AIToolsSection = () => (
@@ -45,7 +52,7 @@ const AIToolsSection = () => (
     <h2 className="font-heading text-4xl font-bold text-foreground mb-10">
       AI Tools & Platforms
     </h2>
-    <div className="grid gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+    <div className="grid gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
       {tools.map((tool) => (
         <div
           key={tool.name}
