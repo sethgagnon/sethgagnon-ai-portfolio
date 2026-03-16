@@ -38,6 +38,27 @@ export type Database = {
         }
         Relationships: []
       }
+      featured_repos: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          repo_full_name: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          repo_full_name: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          repo_full_name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
+import { Trash2, ArrowUp, ArrowDown } from "lucide-react";
 
 const ADMIN_PIN = "1234";
 
@@ -14,10 +15,10 @@ interface SearchResult {
   similarity: number;
 }
 
-interface SyncStatus {
-  aiContext: number;
-  newsletter: number;
-  lastSync: string | null;
+interface FeaturedRepo {
+  id: string;
+  repo_full_name: string;
+  display_order: number;
 }
 
 export default function Admin() {
@@ -25,57 +26,94 @@ export default function Admin() {
   const [authenticated, setAuthenticated] = useState(false);
   const [syncing, setSyncing] = useState<string | null>(null);
   const [syncResult, setSyncResult] = useState<string | null>(null);
-  const [status, setStatus] = useState<SyncStatus | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searching, setSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
+  // GitHub repos state
+  const [repos, setRepos] = useState<FeaturedRepo[]>([]);
+  const [repoInput, setRepoInput] = useState("");
+  const [addingRepo, setAddingRepo] = useState(false);
+
   const handlePin = () => {
     if (pin === ADMIN_PIN) {
       setAuthenticated(true);
-      loadStatus();
+      loadRepos();
     } else {
       toast({ title: "Invalid PIN", variant: "destructive" });
     }
   };
 
-  const loadStatus = useCallback(async () => {
+  const loadRepos = useCallback(async () => {
     try {
-      const { data, error } = await supabase.functions.invoke("search-documents", {
-        body: { query: "status check", match_count: 0 },
+      const { data, error } = await supabase.functions.invoke("manage-repos", {
+        body: { action: "list" },
       });
-      // Just get counts from a direct query won't work with RLS, so we use edge function approach
-      // Instead, let's invoke a simple count via the search function
-    } catch {
-      // ignore
-    }
-
-    // Use edge function to get status by searching with a dummy query
-    // Actually, let's query the documents table count per source via a workaround
-    // Since RLS blocks anon, we'll just show sync results after syncing
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/search-documents`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-          body: JSON.stringify({ query: "cloud engineering", match_count: 1 }),
-        }
-      );
-      // If this works, documents exist
-      if (res.ok) {
-        const data = await res.json();
-        if (data.results?.length > 0) {
-          setStatus((prev) => prev || { aiContext: 0, newsletter: 0, lastSync: null });
-        }
-      }
+      if (!error && data?.repos) setRepos(data.repos);
     } catch {
       // ignore
     }
   }, []);
+
+  const handleAddRepo = async () => {
+    const name = repoInput.trim();
+    if (!name) return;
+    setAddingRepo(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("manage-repos", {
+        body: { action: "add", pin: ADMIN_PIN, repo_full_name: name },
+      });
+      if (error) throw error;
+      if (data?.error) {
+        toast({ title: "Error", description: data.error, variant: "destructive" });
+      } else {
+        toast({ title: "Repo added", description: name });
+        setRepoInput("");
+        loadRepos();
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Unknown error";
+      toast({ title: "Failed to add repo", description: msg, variant: "destructive" });
+    } finally {
+      setAddingRepo(false);
+    }
+  };
+
+  const handleRemoveRepo = async (id: string) => {
+    try {
+      const { data, error } = await supabase.functions.invoke("manage-repos", {
+        body: { action: "remove", pin: ADMIN_PIN, repo_id: id },
+      });
+      if (error) throw error;
+      if (data?.error) {
+        toast({ title: "Error", description: data.error, variant: "destructive" });
+      } else {
+        setRepos((prev) => prev.filter((r) => r.id !== id));
+      }
+    } catch {
+      toast({ title: "Failed to remove repo", variant: "destructive" });
+    }
+  };
+
+  const handleReorder = async (index: number, direction: "up" | "down") => {
+    const newRepos = [...repos];
+    const swapIndex = direction === "up" ? index - 1 : index + 1;
+    if (swapIndex < 0 || swapIndex >= newRepos.length) return;
+    [newRepos[index], newRepos[swapIndex]] = [newRepos[swapIndex], newRepos[index]];
+    setRepos(newRepos);
+    try {
+      await supabase.functions.invoke("manage-repos", {
+        body: {
+          action: "reorder",
+          pin: ADMIN_PIN,
+          ordered_ids: newRepos.map((r) => r.id),
+        },
+      });
+    } catch {
+      // revert on failure
+      loadRepos();
+    }
+  };
 
   const handleSync = async (source: string) => {
     setSyncing(source);
@@ -145,6 +183,70 @@ export default function Admin() {
     <div className="min-h-screen bg-background p-6 max-w-4xl mx-auto space-y-6">
       <h1 className="text-2xl font-bold text-foreground">Admin - Embeddings Pipeline</h1>
 
+      {/* Featured GitHub Repos */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Featured GitHub Repos</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex gap-2">
+            <Input
+              placeholder="owner/repo (e.g. sethgagnon/my-project)"
+              value={repoInput}
+              onChange={(e) => setRepoInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleAddRepo()}
+            />
+            <Button onClick={handleAddRepo} disabled={addingRepo}>
+              {addingRepo ? "Adding…" : "Add"}
+            </Button>
+          </div>
+
+          {repos.length > 0 && (
+            <div className="space-y-2">
+              {repos.map((repo, i) => (
+                <div
+                  key={repo.id}
+                  className="flex items-center justify-between border border-border rounded-lg px-4 py-2"
+                >
+                  <span className="text-sm text-foreground font-mono">
+                    {repo.repo_full_name}
+                  </span>
+                  <div className="flex items-center gap-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleReorder(i, "up")}
+                      disabled={i === 0}
+                    >
+                      <ArrowUp className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleReorder(i, "down")}
+                      disabled={i === repos.length - 1}
+                    >
+                      <ArrowDown className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleRemoveRepo(repo.id)}
+                    >
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {repos.length === 0 && (
+            <p className="text-sm text-muted-foreground">No repos featured yet.</p>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Sync Controls */}
       <Card>
         <CardHeader>
@@ -152,23 +254,13 @@ export default function Admin() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap gap-3">
-            <Button
-              onClick={() => handleSync("ai_context")}
-              disabled={!!syncing}
-            >
+            <Button onClick={() => handleSync("ai_context")} disabled={!!syncing}>
               {syncing === "ai_context" ? "Syncing…" : "Sync AI Context"}
             </Button>
-            <Button
-              onClick={() => handleSync("newsletter")}
-              disabled={!!syncing}
-            >
+            <Button onClick={() => handleSync("newsletter")} disabled={!!syncing}>
               {syncing === "newsletter" ? "Syncing…" : "Sync Newsletter Articles"}
             </Button>
-            <Button
-              onClick={() => handleSync("all")}
-              disabled={!!syncing}
-              variant="secondary"
-            >
+            <Button onClick={() => handleSync("all")} disabled={!!syncing} variant="secondary">
               {syncing === "all" ? "Syncing…" : "Sync All"}
             </Button>
           </div>
@@ -211,9 +303,7 @@ export default function Admin() {
                       {(result.metadata as any)?.source}
                     </span>
                   </div>
-                  <p className="text-sm text-foreground line-clamp-4">
-                    {result.content}
-                  </p>
+                  <p className="text-sm text-foreground line-clamp-4">{result.content}</p>
                   <pre className="text-xs text-muted-foreground overflow-x-auto">
                     {JSON.stringify(result.metadata, null, 2)}
                   </pre>
