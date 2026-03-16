@@ -69,7 +69,8 @@ export function useGitHubRepos() {
                 });
                 if (readmeRes.ok) {
                   const readmeData = await readmeRes.json();
-                  const decoded = atob(readmeData.content.replace(/\n/g, ""));
+                  const bytes = Uint8Array.from(atob(readmeData.content.replace(/\n/g, "")), c => c.charCodeAt(0));
+                  const decoded = new TextDecoder().decode(bytes);
                   readme_excerpt = extractReadmeExcerpt(decoded);
                 }
               } catch { /* fall back to description */ }
