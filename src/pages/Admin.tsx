@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
-import { Trash2, ArrowUp, ArrowDown } from "lucide-react";
+import { Trash2, ArrowUp, ArrowDown, Loader2 } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const ADMIN_PIN = "1234";
 
@@ -21,6 +23,15 @@ interface FeaturedRepo {
   display_order: number;
 }
 
+interface GitHubRepo {
+  full_name: string;
+  name: string;
+  description: string | null;
+  language: string | null;
+  stargazers_count: number;
+  fork: boolean;
+}
+
 export default function Admin() {
   const [pin, setPin] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
@@ -32,8 +43,9 @@ export default function Admin() {
 
   // GitHub repos state
   const [repos, setRepos] = useState<FeaturedRepo[]>([]);
-  const [repoInput, setRepoInput] = useState("");
-  const [addingRepo, setAddingRepo] = useState(false);
+  const [ghRepos, setGhRepos] = useState<GitHubRepo[]>([]);
+  const [loadingGh, setLoadingGh] = useState(false);
+  const [togglingRepo, setTogglingRepo] = useState<string | null>(null);
 
   const handlePin = () => {
     if (pin === ADMIN_PIN) {
@@ -55,43 +67,56 @@ export default function Admin() {
     }
   }, []);
 
-  const handleAddRepo = async () => {
-    const name = repoInput.trim();
-    if (!name) return;
-    setAddingRepo(true);
+  const loadGitHubRepos = async () => {
+    setLoadingGh(true);
     try {
       const { data, error } = await supabase.functions.invoke("manage-repos", {
-        body: { action: "add", pin: ADMIN_PIN, repo_full_name: name },
+        body: { action: "fetch-github-repos" },
       });
       if (error) throw error;
-      if (data?.error) {
-        toast({ title: "Error", description: data.error, variant: "destructive" });
-      } else {
-        toast({ title: "Repo added", description: name });
-        setRepoInput("");
-        loadRepos();
-      }
+      if (data?.repos) setGhRepos(data.repos.filter((r: GitHubRepo) => !r.fork));
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Unknown error";
-      toast({ title: "Failed to add repo", description: msg, variant: "destructive" });
+      toast({ title: "Failed to load repos", description: msg, variant: "destructive" });
     } finally {
-      setAddingRepo(false);
+      setLoadingGh(false);
     }
   };
 
-  const handleRemoveRepo = async (id: string) => {
+  const isFeatured = (fullName: string) =>
+    repos.some((r) => r.repo_full_name === fullName);
+
+  const toggleRepo = async (fullName: string) => {
+    setTogglingRepo(fullName);
     try {
-      const { data, error } = await supabase.functions.invoke("manage-repos", {
-        body: { action: "remove", pin: ADMIN_PIN, repo_id: id },
-      });
-      if (error) throw error;
-      if (data?.error) {
-        toast({ title: "Error", description: data.error, variant: "destructive" });
+      if (isFeatured(fullName)) {
+        const existing = repos.find((r) => r.repo_full_name === fullName);
+        if (!existing) return;
+        const { data, error } = await supabase.functions.invoke("manage-repos", {
+          body: { action: "remove", pin: ADMIN_PIN, repo_id: existing.id },
+        });
+        if (error) throw error;
+        if (data?.error) {
+          toast({ title: "Error", description: data.error, variant: "destructive" });
+        } else {
+          setRepos((prev) => prev.filter((r) => r.id !== existing.id));
+        }
       } else {
-        setRepos((prev) => prev.filter((r) => r.id !== id));
+        const { data, error } = await supabase.functions.invoke("manage-repos", {
+          body: { action: "add", pin: ADMIN_PIN, repo_full_name: fullName },
+        });
+        if (error) throw error;
+        if (data?.error) {
+          toast({ title: "Error", description: data.error, variant: "destructive" });
+        } else {
+          await loadRepos();
+        }
       }
-    } catch {
-      toast({ title: "Failed to remove repo", variant: "destructive" });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Unknown error";
+      toast({ title: "Failed to update repo", description: msg, variant: "destructive" });
+    } finally {
+      setTogglingRepo(null);
     }
   };
 
@@ -110,7 +135,6 @@ export default function Admin() {
         },
       });
     } catch {
-      // revert on failure
       loadRepos();
     }
   };
@@ -189,20 +213,59 @@ export default function Admin() {
           <CardTitle>Featured GitHub Repos</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex gap-2">
-            <Input
-              placeholder="owner/repo (e.g. sethgagnon/my-project)"
-              value={repoInput}
-              onChange={(e) => setRepoInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleAddRepo()}
-            />
-            <Button onClick={handleAddRepo} disabled={addingRepo}>
-              {addingRepo ? "Adding…" : "Add"}
+          {/* Browse repos */}
+          {ghRepos.length === 0 ? (
+            <Button onClick={loadGitHubRepos} disabled={loadingGh}>
+              {loadingGh ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Loading…
+                </>
+              ) : (
+                "Load My Repos"
+              )}
             </Button>
-          </div>
+          ) : (
+            <ScrollArea className="h-64 border border-border rounded-lg">
+              <div className="p-2 space-y-1">
+                {ghRepos.map((gh) => {
+                  const featured = isFeatured(gh.full_name);
+                  const toggling = togglingRepo === gh.full_name;
+                  return (
+                    <label
+                      key={gh.full_name}
+                      className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-accent/50 cursor-pointer transition-colors"
+                    >
+                      <Checkbox
+                        checked={featured}
+                        disabled={toggling}
+                        onCheckedChange={() => toggleRepo(gh.full_name)}
+                      />
+                      <div className="flex-1 min-w-0">
+                        <span className="text-sm font-mono text-foreground">
+                          {gh.name}
+                        </span>
+                        {gh.description && (
+                          <p className="text-xs text-muted-foreground truncate">
+                            {gh.description}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground shrink-0">
+                        {gh.language && <span>{gh.language}</span>}
+                        <span>⭐ {gh.stargazers_count}</span>
+                      </div>
+                    </label>
+                  );
+                })}
+              </div>
+            </ScrollArea>
+          )}
 
+          {/* Reorder featured repos */}
           {repos.length > 0 && (
             <div className="space-y-2">
+              <p className="text-sm font-medium text-muted-foreground">Display Order</p>
               {repos.map((repo, i) => (
                 <div
                   key={repo.id}
@@ -228,21 +291,10 @@ export default function Admin() {
                     >
                       <ArrowDown className="h-4 w-4" />
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleRemoveRepo(repo.id)}
-                    >
-                      <Trash2 className="h-4 w-4 text-destructive" />
-                    </Button>
                   </div>
                 </div>
               ))}
             </div>
-          )}
-
-          {repos.length === 0 && (
-            <p className="text-sm text-muted-foreground">No repos featured yet.</p>
           )}
         </CardContent>
       </Card>
