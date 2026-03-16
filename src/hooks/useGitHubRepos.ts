@@ -6,10 +6,32 @@ export interface GitHubRepo {
   full_name: string;
   name: string;
   description: string | null;
+  readme_excerpt: string | null;
   language: string | null;
   stargazers_count: number;
   forks_count: number;
   html_url: string;
+}
+
+function extractReadmeExcerpt(raw: string, maxLen = 200): string | null {
+  // Strip markdown: badges, images, headers, links, bold/italic, HTML tags
+  const cleaned = raw
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, "")        // images/badges
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")      // links → text
+    .replace(/^#{1,6}\s+.*$/gm, "")               // headers
+    .replace(/[*_]{1,3}([^*_]+)[*_]{1,3}/g, "$1") // bold/italic
+    .replace(/<[^>]+>/g, "")                       // HTML tags
+    .replace(/```[\s\S]*?```/g, "")                // code blocks
+    .replace(/`[^`]+`/g, "")                       // inline code
+    .replace(/\n{2,}/g, "\n")
+    .trim();
+
+  // Find first non-empty line that looks like a sentence
+  const lines = cleaned.split("\n").map(l => l.trim()).filter(l => l.length > 20);
+  if (!lines.length) return null;
+
+  const excerpt = lines[0].length > maxLen ? lines[0].slice(0, maxLen).replace(/\s\S*$/, "…") : lines[0];
+  return excerpt;
 }
 
 export function useGitHubRepos() {
@@ -38,11 +60,26 @@ export function useGitHubRepos() {
               });
               if (!res.ok) return null;
               const data = await res.json();
+
+              // Fetch README excerpt
+              let readme_excerpt: string | null = null;
+              try {
+                const readmeRes = await fetch(`https://api.github.com/repos/${f.repo_full_name}/readme`, {
+                  headers: { "User-Agent": "lovable-app", Accept: "application/vnd.github.v3+json" },
+                });
+                if (readmeRes.ok) {
+                  const readmeData = await readmeRes.json();
+                  const decoded = atob(readmeData.content.replace(/\n/g, ""));
+                  readme_excerpt = extractReadmeExcerpt(decoded);
+                }
+              } catch { /* fall back to description */ }
+
               return {
                 id: f.id,
                 full_name: data.full_name,
                 name: data.name,
                 description: data.description,
+                readme_excerpt,
                 language: data.language,
                 stargazers_count: data.stargazers_count,
                 forks_count: data.forks_count,
