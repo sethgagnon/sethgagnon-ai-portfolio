@@ -6,10 +6,32 @@ export interface GitHubRepo {
   full_name: string;
   name: string;
   description: string | null;
+  readme_excerpt: string | null;
   language: string | null;
   stargazers_count: number;
   forks_count: number;
   html_url: string;
+}
+
+function extractReadmeExcerpt(raw: string, maxLen = 200): string | null {
+  // Strip markdown: badges, images, headers, links, bold/italic, HTML tags
+  const cleaned = raw
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, "")        // images/badges
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")      // links → text
+    .replace(/^#{1,6}\s+.*$/gm, "")               // headers
+    .replace(/[*_]{1,3}([^*_]+)[*_]{1,3}/g, "$1") // bold/italic
+    .replace(/<[^>]+>/g, "")                       // HTML tags
+    .replace(/```[\s\S]*?```/g, "")                // code blocks
+    .replace(/`[^`]+`/g, "")                       // inline code
+    .replace(/\n{2,}/g, "\n")
+    .trim();
+
+  // Find first non-empty line that looks like a sentence
+  const lines = cleaned.split("\n").map(l => l.trim()).filter(l => l.length > 20);
+  if (!lines.length) return null;
+
+  const excerpt = lines[0].length > maxLen ? lines[0].slice(0, maxLen).replace(/\s\S*$/, "…") : lines[0];
+  return excerpt;
 }
 
 export function useGitHubRepos() {
