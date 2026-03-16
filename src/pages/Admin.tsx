@@ -1,14 +1,14 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
-import { Trash2, ArrowUp, ArrowDown, Loader2 } from "lucide-react";
+import { ArrowUp, ArrowDown, Loader2, LogOut } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
-const ADMIN_PIN = "1234";
+import type { Session } from "@supabase/supabase-js";
 
 interface SearchResult {
   id: string;
@@ -33,28 +33,19 @@ interface GitHubRepo {
 }
 
 export default function Admin() {
-  const [pin, setPin] = useState("");
-  const [authenticated, setAuthenticated] = useState(false);
+  const navigate = useNavigate();
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState<string | null>(null);
   const [syncResult, setSyncResult] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searching, setSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
-  // GitHub repos state
   const [repos, setRepos] = useState<FeaturedRepo[]>([]);
   const [ghRepos, setGhRepos] = useState<GitHubRepo[]>([]);
   const [loadingGh, setLoadingGh] = useState(false);
   const [togglingRepo, setTogglingRepo] = useState<string | null>(null);
-
-  const handlePin = () => {
-    if (pin === ADMIN_PIN) {
-      setAuthenticated(true);
-      loadRepos();
-    } else {
-      toast({ title: "Invalid PIN", variant: "destructive" });
-    }
-  };
 
   const loadRepos = useCallback(async () => {
     try {
@@ -66,6 +57,26 @@ export default function Admin() {
       // ignore
     }
   }, []);
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, sess) => {
+      setSession(sess);
+      setLoading(false);
+      if (!sess) navigate("/auth", { replace: true });
+    });
+    supabase.auth.getSession().then(({ data: { session: sess } }) => {
+      setSession(sess);
+      setLoading(false);
+      if (!sess) navigate("/auth", { replace: true });
+      else loadRepos();
+    });
+    return () => subscription.unsubscribe();
+  }, [navigate, loadRepos]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate("/auth", { replace: true });
+  };
 
   const loadGitHubRepos = async () => {
     setLoadingGh(true);
@@ -83,8 +94,7 @@ export default function Admin() {
     }
   };
 
-  const isFeatured = (fullName: string) =>
-    repos.some((r) => r.repo_full_name === fullName);
+  const isFeatured = (fullName: string) => repos.some((r) => r.repo_full_name === fullName);
 
   const toggleRepo = async (fullName: string) => {
     setTogglingRepo(fullName);
@@ -93,7 +103,7 @@ export default function Admin() {
         const existing = repos.find((r) => r.repo_full_name === fullName);
         if (!existing) return;
         const { data, error } = await supabase.functions.invoke("manage-repos", {
-          body: { action: "remove", pin: ADMIN_PIN, repo_id: existing.id },
+          body: { action: "remove", repo_id: existing.id },
         });
         if (error) throw error;
         if (data?.error) {
@@ -103,7 +113,7 @@ export default function Admin() {
         }
       } else {
         const { data, error } = await supabase.functions.invoke("manage-repos", {
-          body: { action: "add", pin: ADMIN_PIN, repo_full_name: fullName },
+          body: { action: "add", repo_full_name: fullName },
         });
         if (error) throw error;
         if (data?.error) {
@@ -128,11 +138,7 @@ export default function Admin() {
     setRepos(newRepos);
     try {
       await supabase.functions.invoke("manage-repos", {
-        body: {
-          action: "reorder",
-          pin: ADMIN_PIN,
-          ordered_ids: newRepos.map((r) => r.id),
-        },
+        body: { action: "reorder", ordered_ids: newRepos.map((r) => r.id) },
       });
     } catch {
       loadRepos();
@@ -178,34 +184,25 @@ export default function Admin() {
     }
   };
 
-  if (!authenticated) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <Card className="w-80">
-          <CardHeader>
-            <CardTitle className="text-center">Admin Access</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Input
-              type="password"
-              placeholder="Enter PIN"
-              maxLength={4}
-              value={pin}
-              onChange={(e) => setPin(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handlePin()}
-            />
-            <Button className="w-full" onClick={handlePin}>
-              Enter
-            </Button>
-          </CardContent>
-        </Card>
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
 
+  if (!session) return null;
+
   return (
     <div className="min-h-screen bg-background p-6 max-w-4xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold text-foreground">Admin - Embeddings Pipeline</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-foreground">Admin Dashboard</h1>
+        <Button variant="outline" size="sm" onClick={handleLogout}>
+          <LogOut className="h-4 w-4 mr-2" />
+          Log Out
+        </Button>
+      </div>
 
       {/* Featured GitHub Repos */}
       <Card>
@@ -213,7 +210,6 @@ export default function Admin() {
           <CardTitle>Featured GitHub Repos</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Browse repos */}
           {ghRepos.length === 0 ? (
             <Button onClick={loadGitHubRepos} disabled={loadingGh}>
               {loadingGh ? (
@@ -242,13 +238,9 @@ export default function Admin() {
                         onCheckedChange={() => toggleRepo(gh.full_name)}
                       />
                       <div className="flex-1 min-w-0">
-                        <span className="text-sm font-mono text-foreground">
-                          {gh.name}
-                        </span>
+                        <span className="text-sm font-mono text-foreground">{gh.name}</span>
                         {gh.description && (
-                          <p className="text-xs text-muted-foreground truncate">
-                            {gh.description}
-                          </p>
+                          <p className="text-xs text-muted-foreground truncate">{gh.description}</p>
                         )}
                       </div>
                       <div className="flex items-center gap-2 text-xs text-muted-foreground shrink-0">
@@ -262,7 +254,6 @@ export default function Admin() {
             </ScrollArea>
           )}
 
-          {/* Reorder featured repos */}
           {repos.length > 0 && (
             <div className="space-y-2">
               <p className="text-sm font-medium text-muted-foreground">Display Order</p>
@@ -271,24 +262,12 @@ export default function Admin() {
                   key={repo.id}
                   className="flex items-center justify-between border border-border rounded-lg px-4 py-2"
                 >
-                  <span className="text-sm text-foreground font-mono">
-                    {repo.repo_full_name}
-                  </span>
+                  <span className="text-sm text-foreground font-mono">{repo.repo_full_name}</span>
                   <div className="flex items-center gap-1">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleReorder(i, "up")}
-                      disabled={i === 0}
-                    >
+                    <Button variant="ghost" size="icon" onClick={() => handleReorder(i, "up")} disabled={i === 0}>
                       <ArrowUp className="h-4 w-4" />
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleReorder(i, "down")}
-                      disabled={i === repos.length - 1}
-                    >
+                    <Button variant="ghost" size="icon" onClick={() => handleReorder(i, "down")} disabled={i === repos.length - 1}>
                       <ArrowDown className="h-4 w-4" />
                     </Button>
                   </div>
@@ -316,9 +295,7 @@ export default function Admin() {
               {syncing === "all" ? "Syncing…" : "Sync All"}
             </Button>
           </div>
-          {syncResult && (
-            <p className="text-sm text-muted-foreground font-mono">{syncResult}</p>
-          )}
+          {syncResult && <p className="text-sm text-muted-foreground font-mono">{syncResult}</p>}
         </CardContent>
       </Card>
 
@@ -343,10 +320,7 @@ export default function Admin() {
           {searchResults.length > 0 && (
             <div className="space-y-3">
               {searchResults.map((result, i) => (
-                <div
-                  key={result.id}
-                  className="border border-border rounded-lg p-4 space-y-2"
-                >
+                <div key={result.id} className="border border-border rounded-lg p-4 space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-xs font-mono text-muted-foreground">
                       #{i + 1} - similarity: {(result.similarity * 100).toFixed(1)}%
