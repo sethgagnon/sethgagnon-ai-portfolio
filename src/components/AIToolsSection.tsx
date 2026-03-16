@@ -55,6 +55,8 @@ const AIToolsSection = () => (
           <img
             src={tool.logo}
             alt={`${tool.name} logo`}
+            className={`h-10 w-10 object-contain ${tool.invertLogo ? "invert" : ""}`}
+          />
             className="h-10 w-10 object-contain"
           />
           <div>
