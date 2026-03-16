@@ -60,7 +60,7 @@ const AIToolsSection = () => {
   const { repos, loading } = useGitHubRepos();
 
   return (
-    <section className="mx-auto max-w-6xl px-6 py-24">
+    <section id="ai-tools" className="mx-auto max-w-6xl px-6 py-24">
       <h2 className="font-heading text-4xl font-bold text-foreground mb-10">
         AI Tools & Platforms
       </h2>
