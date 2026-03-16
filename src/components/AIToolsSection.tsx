@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import lovableLogo from "@/assets/tools/lovable.png";
 import cursorLogo from "@/assets/tools/cursor.svg";
 import kiroLogo from "@/assets/tools/kiro.svg";
+import copilotLogo from "@/assets/tools/copilot.png";
 
 const tools = [
   {
@@ -23,6 +24,12 @@ const tools = [
     logo: kiroLogo,
     featured: false,
   },
+  {
+    name: "Microsoft Copilot",
+    descriptor: "AI Assistant",
+    logo: copilotLogo,
+    featured: false,
+  },
 ];
 
 const AIToolsSection = () => (
@@ -30,7 +37,7 @@ const AIToolsSection = () => (
     <h2 className="font-heading text-4xl font-bold text-foreground mb-10">
       AI Tools & Platforms
     </h2>
-    <div className="grid gap-6 md:grid-cols-3">
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
       {tools.map((tool) => (
         <div
           key={tool.name}
