@@ -27,6 +27,9 @@ const Index = () => {
         <SkillsSection />
       </ErrorBoundary>
       <ErrorBoundary>
+        <AIToolsSection />
+      </ErrorBoundary>
+      <ErrorBoundary>
         <FitAssessmentSection />
       </ErrorBoundary>
       <Footer />
