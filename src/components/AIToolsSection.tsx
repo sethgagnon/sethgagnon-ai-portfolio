@@ -57,8 +57,6 @@ const AIToolsSection = () => (
             alt={`${tool.name} logo`}
             className={`h-10 w-10 object-contain ${tool.invertLogo ? "invert" : ""}`}
           />
-            className="h-10 w-10 object-contain"
-          />
           <div>
             <h3 className="font-heading text-xl font-semibold text-foreground">
               {tool.name}
