@@ -36,6 +36,8 @@ const tools = [
     descriptor: "AI Research & APIs",
     logo: openaiLogo,
     featured: false,
+    invertLogo: true,
+  },
   },
 ];
 
