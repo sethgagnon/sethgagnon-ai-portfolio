@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import lovableLogo from "@/assets/tools/lovable.png";
 import cursorLogo from "@/assets/tools/cursor.svg";
 import kiroLogo from "@/assets/tools/kiro.svg";
+import copilotLogo from "@/assets/tools/copilot.png";
 
 const tools = [
   {
@@ -21,6 +22,12 @@ const tools = [
     name: "Kiro",
     descriptor: "AI Development Tool",
     logo: kiroLogo,
+    featured: false,
+  },
+  {
+    name: "Microsoft Copilot",
+    descriptor: "AI Assistant",
+    logo: copilotLogo,
     featured: false,
   },
 ];
