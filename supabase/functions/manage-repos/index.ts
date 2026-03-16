@@ -6,7 +6,21 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const ADMIN_PIN = "1234";
+async function verifyAuth(req: Request) {
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) return null;
+
+  const supabase = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_ANON_KEY")!,
+    { global: { headers: { Authorization: authHeader } } }
+  );
+
+  const token = authHeader.replace("Bearer ", "");
+  const { data, error } = await supabase.auth.getClaims(token);
+  if (error || !data?.claims) return null;
+  return data.claims;
+}
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -14,9 +28,9 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { action, pin, repo_full_name, repo_id, ordered_ids } = await req.json();
+    const { action, repo_full_name, repo_id, ordered_ids } = await req.json();
 
-    // List is public (no PIN needed)
+    // Public actions — no auth needed
     if (action === "list") {
       const supabase = createClient(
         Deno.env.get("SUPABASE_URL")!,
@@ -32,7 +46,6 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Fetch all public repos for a GitHub user (no PIN needed)
     if (action === "fetch-github-repos") {
       const username = "sethgagnon";
       const allRepos: any[] = [];
@@ -68,8 +81,9 @@ Deno.serve(async (req) => {
       });
     }
 
-    // All other actions require PIN
-    if (pin !== ADMIN_PIN) {
+    // Protected actions — require authenticated user
+    const claims = await verifyAuth(req);
+    if (!claims) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -89,21 +103,16 @@ Deno.serve(async (req) => {
         });
       }
 
-      // Validate repo exists on GitHub
       const ghRes = await fetch(`https://api.github.com/repos/${repo_full_name}`, {
         headers: { "User-Agent": "lovable-app" },
       });
       if (!ghRes.ok) {
         return new Response(
           JSON.stringify({ error: `GitHub repo "${repo_full_name}" not found` }),
-          {
-            status: 404,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-          }
+          { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
 
-      // Get max display_order
       const { data: existing } = await supabase
         .from("featured_repos")
         .select("display_order")
