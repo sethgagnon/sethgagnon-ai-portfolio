@@ -5,6 +5,7 @@ import kiroLogo from "@/assets/tools/kiro.svg";
 import copilotLogo from "@/assets/tools/copilot.png";
 import openaiLogo from "@/assets/tools/openai.png";
 import claudeLogo from "@/assets/tools/claude.png";
+import geminiLogo from "@/assets/tools/gemini.png";
 
 const tools = [
   {
@@ -43,6 +44,12 @@ const tools = [
     name: "Claude",
     descriptor: "AI Assistant",
     logo: claudeLogo,
+    featured: false,
+  },
+  {
+    name: "Google Gemini",
+    descriptor: "AI Platform",
+    logo: geminiLogo,
     featured: false,
   },
 ];
