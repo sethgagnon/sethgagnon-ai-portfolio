@@ -70,7 +70,7 @@ const AIToolsSection = () => (
           <img
             src={tool.logo}
             alt={`${tool.name} logo`}
-            className={`h-10 w-10 object-contain ${tool.invertLogo ? "invert" : ""}`}
+            className={`h-14 w-14 object-contain ${tool.invertLogo ? "invert" : ""}`}
           />
           <div>
             <h3 className="font-heading text-xl font-semibold text-foreground">
