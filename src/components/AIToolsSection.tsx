@@ -3,6 +3,7 @@ import lovableLogo from "@/assets/tools/lovable.png";
 import cursorLogo from "@/assets/tools/cursor.svg";
 import kiroLogo from "@/assets/tools/kiro.svg";
 import copilotLogo from "@/assets/tools/copilot.png";
+import openaiLogo from "@/assets/tools/openai.png";
 
 const tools = [
   {
@@ -30,6 +31,13 @@ const tools = [
     logo: copilotLogo,
     featured: false,
   },
+  {
+    name: "OpenAI",
+    descriptor: "AI Research & APIs",
+    logo: openaiLogo,
+    featured: false,
+    invertLogo: true,
+  },
 ];
 
 const AIToolsSection = () => (
@@ -37,7 +45,7 @@ const AIToolsSection = () => (
     <h2 className="font-heading text-4xl font-bold text-foreground mb-10">
       AI Tools & Platforms
     </h2>
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
       {tools.map((tool) => (
         <div
           key={tool.name}
@@ -48,7 +56,7 @@ const AIToolsSection = () => (
           <img
             src={tool.logo}
             alt={`${tool.name} logo`}
-            className="h-10 w-10 object-contain"
+            className={`h-10 w-10 object-contain ${tool.invertLogo ? "invert" : ""}`}
           />
           <div>
             <h3 className="font-heading text-xl font-semibold text-foreground">
