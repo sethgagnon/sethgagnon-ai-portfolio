@@ -2,3 +2,6 @@ project_id = "ewfxcoomslgsvwekcjhc"
 
 [functions.jd-fit]
 verify_jwt = false
+
+[functions.manage-repos]
+verify_jwt = false
