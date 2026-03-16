@@ -32,6 +32,42 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Fetch all public repos for a GitHub user (no PIN needed)
+    if (action === "fetch-github-repos") {
+      const username = "sethgagnon";
+      const allRepos: any[] = [];
+      let page = 1;
+      while (true) {
+        const res = await fetch(
+          `https://api.github.com/users/${username}/repos?per_page=100&sort=updated&page=${page}`,
+          { headers: { "User-Agent": "lovable-app" } }
+        );
+        if (!res.ok) {
+          return new Response(
+            JSON.stringify({ error: `GitHub API error: ${res.status}` }),
+            { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+        const batch = await res.json();
+        if (batch.length === 0) break;
+        allRepos.push(
+          ...batch.map((r: any) => ({
+            full_name: r.full_name,
+            name: r.name,
+            description: r.description,
+            language: r.language,
+            stargazers_count: r.stargazers_count,
+            fork: r.fork,
+          }))
+        );
+        if (batch.length < 100) break;
+        page++;
+      }
+      return new Response(JSON.stringify({ repos: allRepos }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     // All other actions require PIN
     if (pin !== ADMIN_PIN) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
