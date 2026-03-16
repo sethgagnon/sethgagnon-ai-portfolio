@@ -4,6 +4,7 @@ import cursorLogo from "@/assets/tools/cursor.svg";
 import kiroLogo from "@/assets/tools/kiro.svg";
 import copilotLogo from "@/assets/tools/copilot.png";
 import openaiLogo from "@/assets/tools/openai.png";
+import claudeLogo from "@/assets/tools/claude.png";
 
 const tools = [
   {
@@ -37,6 +38,12 @@ const tools = [
     logo: openaiLogo,
     featured: false,
     invertLogo: true,
+  },
+  {
+    name: "Claude",
+    descriptor: "AI Assistant",
+    logo: claudeLogo,
+    featured: false,
   },
 ];
 
