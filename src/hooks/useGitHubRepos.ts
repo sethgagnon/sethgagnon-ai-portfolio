@@ -60,11 +60,26 @@ export function useGitHubRepos() {
               });
               if (!res.ok) return null;
               const data = await res.json();
+
+              // Fetch README excerpt
+              let readme_excerpt: string | null = null;
+              try {
+                const readmeRes = await fetch(`https://api.github.com/repos/${f.repo_full_name}/readme`, {
+                  headers: { "User-Agent": "lovable-app", Accept: "application/vnd.github.v3+json" },
+                });
+                if (readmeRes.ok) {
+                  const readmeData = await readmeRes.json();
+                  const decoded = atob(readmeData.content.replace(/\n/g, ""));
+                  readme_excerpt = extractReadmeExcerpt(decoded);
+                }
+              } catch { /* fall back to description */ }
+
               return {
                 id: f.id,
                 full_name: data.full_name,
                 name: data.name,
                 description: data.description,
+                readme_excerpt,
                 language: data.language,
                 stargazers_count: data.stargazers_count,
                 forks_count: data.forks_count,

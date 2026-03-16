@@ -48,8 +48,8 @@ export function GitHubProjectCard({ repo }: { repo: GitHubRepo }) {
         <ExternalLink className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
       </div>
 
-      {repo.description && (
-        <p className="text-sm text-muted-foreground line-clamp-2">{repo.description}</p>
+      {(repo.readme_excerpt || repo.description) && (
+        <p className="text-sm text-muted-foreground line-clamp-3">{repo.readme_excerpt || repo.description}</p>
       )}
 
       <div className="flex items-center gap-4 mt-auto text-xs text-muted-foreground">
