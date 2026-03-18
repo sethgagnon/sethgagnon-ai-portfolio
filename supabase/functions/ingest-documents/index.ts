@@ -275,12 +275,36 @@ async function getNewsletterChunks(): Promise<{ content: string; metadata: Recor
 
 // ── Main handler ────────────────────────────────────────────────────
 
+async function verifyAuth(req: Request) {
+  const authHeader = req.headers.get('Authorization');
+  if (!authHeader?.startsWith('Bearer ')) return null;
+
+  const anonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+  const sb = createClient(SUPABASE_URL, anonKey, {
+    global: { headers: { Authorization: authHeader } },
+  });
+
+  const token = authHeader.replace('Bearer ', '');
+  const { data, error } = await sb.auth.getClaims(token);
+  if (error || !data?.claims) return null;
+  return data.claims;
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
+    // Require authenticated user
+    const claims = await verifyAuth(req);
+    if (!claims) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     const { source = 'all' } = await req.json();
 
     if (!['ai_context', 'newsletter', 'all'].includes(source)) {
@@ -346,7 +370,7 @@ Deno.serve(async (req) => {
     });
   } catch (error) {
     console.error('ingest-documents error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: 'An internal error occurred. Please try again.' }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

@@ -161,7 +161,7 @@ Deno.serve(async (req) => {
 
     if (!res.ok) {
       console.error('Notion API error:', JSON.stringify(data));
-      return new Response(JSON.stringify({ error: 'Failed to query Notion', details: data }), {
+      return new Response(JSON.stringify({ error: 'An internal error occurred. Please try again.' }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -205,7 +205,7 @@ Deno.serve(async (req) => {
     });
   } catch (error) {
     console.error('Edge function error:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: 'An internal error occurred. Please try again.' }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
