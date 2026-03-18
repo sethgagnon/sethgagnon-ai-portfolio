@@ -141,12 +141,15 @@ Deno.serve(async (req) => {
     }
 
     // LIST MODE
+    const { type } = body;
+    const formatValue = type === 'quick-takes' ? 'Quick Take' : 'Newsletter Article';
+
     const res = await notionFetch(`https://api.notion.com/v1/databases/${NOTION_DATABASE_ID}/query`, {
       method: 'POST',
       body: JSON.stringify({
         filter: {
           and: [
-            { property: 'Format', select: { equals: 'Newsletter Article' } },
+            { property: 'Format', select: { equals: formatValue } },
             { property: 'Status', select: { equals: 'Posted' } },
           ],
         },

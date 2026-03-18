@@ -11,6 +11,7 @@ const NavBar = ({ onOpenChat }: NavBarProps) => {
 
   const links = [
     { label: "Writing", href: "#writing" },
+    { label: "Quick Takes", href: "#quick-takes" },
     { label: "Experience", href: "#experience" },
     { label: "AI Tools", href: "#ai-tools" },
     { label: "Fit Check", href: "#fit-check" },
