@@ -68,6 +68,13 @@ Deno.serve(async (req) => {
       });
     }
 
+    if (jd.length > 8000) {
+      return new Response(JSON.stringify({ error: 'Job description must be under 8,000 characters.' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     // 1. Embed the JD text
     const embRes = await fetch('https://api.openai.com/v1/embeddings', {
       method: 'POST',
