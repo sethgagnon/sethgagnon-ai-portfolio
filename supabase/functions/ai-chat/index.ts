@@ -39,6 +39,21 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Input validation: cap message length and history size
+    if (message.length > 4000) {
+      return new Response(JSON.stringify({ error: 'Message must be under 4,000 characters.' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const sanitizedHistory = (Array.isArray(history) ? history : [])
+      .slice(-20)
+      .map((h: { role: string; content: string }) => ({
+        role: h.role === 'assistant' ? 'assistant' : 'user',
+        content: typeof h.content === 'string' ? h.content.slice(0, 2000) : '',
+      }));
+
     // 1. Embed the user's message
     const embRes = await fetch('https://api.openai.com/v1/embeddings', {
       method: 'POST',
