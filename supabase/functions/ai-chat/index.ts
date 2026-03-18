@@ -97,10 +97,7 @@ Deno.serve(async (req) => {
 
     // 4. Build messages for Claude
     const claudeMessages = [
-      ...history.map((h: { role: string; content: string }) => ({
-        role: h.role,
-        content: h.content,
-      })),
+      ...sanitizedHistory,
       { role: 'user', content: message },
     ];
 
