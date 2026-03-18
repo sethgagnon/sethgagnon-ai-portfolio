@@ -21,6 +21,9 @@ const Index = () => {
         <WritingSection />
       </ErrorBoundary>
       <ErrorBoundary>
+        <QuickTakesSection />
+      </ErrorBoundary>
+      <ErrorBoundary>
         <ExperienceSection />
       </ErrorBoundary>
       <ErrorBoundary>
