@@ -36,7 +36,11 @@ function richTextToHtml(richTextArray: any[]): string {
     if (a.strikethrough) text = `<s>${text}</s>`;
     if (a.underline) text = `<u>${text}</u>`;
     if (a.code) text = `<code>${text}</code>`;
-    if (rt.href) text = `<a href="${rt.href}" target="_blank" rel="noopener">${text}</a>`;
+    if (rt.href) {
+      // Sanitize href to prevent javascript: protocol XSS
+      const safeHref = /^https?:\/\//i.test(rt.href) ? rt.href : '#';
+      text = `<a href="${safeHref}" target="_blank" rel="noopener">${text}</a>`;
+    }
     return text;
   }).join('');
 }

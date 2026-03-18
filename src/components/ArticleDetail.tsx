@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import DOMPurify from "dompurify";
 import {
   Dialog,
   DialogContent,
@@ -89,7 +90,7 @@ const ArticleDetail = ({ articleId, title, date, tags, postUrl, onClose }: Artic
           {content && (
             <article
               className="prose prose-invert prose-sm max-w-none prose-headings:font-heading prose-a:text-primary"
-              dangerouslySetInnerHTML={{ __html: content }}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content, { ADD_ATTR: ['target', 'rel'] }) }}
             />
           )}
         </div>
