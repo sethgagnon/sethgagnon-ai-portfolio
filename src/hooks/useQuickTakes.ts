@@ -8,6 +8,7 @@ export interface QuickTake {
   description: string;
   tags: string[];
   postUrl: string | null;
+  bodyExcerpt: string;
 }
 
 async function fetchQuickTakes(): Promise<QuickTake[]> {

@@ -92,9 +92,9 @@ const QuickTakesSection = () => {
               <h3 className="font-heading text-sm font-semibold text-foreground leading-snug">
                 {qt.title}
               </h3>
-              {qt.description && (
+              {(qt.bodyExcerpt || qt.description) && (
                 <p className="mt-2 text-xs text-muted-foreground leading-relaxed line-clamp-4 flex-1">
-                  {qt.description}
+                  {qt.bodyExcerpt || qt.description}
                 </p>
               )}
               {qt.tags.length > 0 && (

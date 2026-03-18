@@ -167,7 +167,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const articles = (data.results || []).map((page: any) => {
+    let articles = (data.results || []).map((page: any) => {
       const props = page.properties;
       return {
         id: page.id,
@@ -176,8 +176,29 @@ Deno.serve(async (req) => {
         description: extractPlainText(props['SEO Description']?.rich_text || []),
         tags: (props['Topic Tags']?.multi_select || []).map((t: any) => t.name),
         postUrl: props['Post URL']?.url || null,
+        bodyExcerpt: '',
       };
     });
+
+    // For quick-takes, fetch body excerpts
+    if (type === 'quick-takes') {
+      await Promise.all(articles.map(async (article) => {
+        try {
+          const url = `https://api.notion.com/v1/blocks/${article.id}/children?page_size=5`;
+          const blockRes = await notionFetch(url);
+          const blockData = await blockRes.json();
+          const blocks = blockData.results || [];
+          const plainText = blocks
+            .map((b: any) => {
+              const rt = b[b.type]?.rich_text;
+              return rt ? extractPlainText(rt) : '';
+            })
+            .filter(Boolean)
+            .join(' ');
+          article.bodyExcerpt = plainText.length > 300 ? plainText.slice(0, 300) + '…' : plainText;
+        } catch { /* skip excerpt on error */ }
+      }));
+    }
 
     return new Response(JSON.stringify({ articles }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
