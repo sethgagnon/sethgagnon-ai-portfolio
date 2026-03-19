@@ -15,7 +15,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { query, match_count = 5 } = await req.json();
+    const { query, match_count: rawMatchCount = 5 } = await req.json();
 
     if (!query || typeof query !== 'string') {
       return new Response(JSON.stringify({ error: 'query is required' }), {
@@ -23,6 +23,15 @@ Deno.serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
+
+    if (query.length > 2000) {
+      return new Response(JSON.stringify({ error: 'Query must be under 2,000 characters.' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const match_count = Math.min(Math.max(1, Number(rawMatchCount) || 5), 20);
 
     // Generate embedding for query
     const embRes = await fetch('https://api.openai.com/v1/embeddings', {
