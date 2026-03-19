@@ -15,7 +15,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { query, match_count = 5 } = await req.json();
+    const { query, match_count: rawMatchCount = 5 } = await req.json();
 
     if (!query || typeof query !== 'string') {
       return new Response(JSON.stringify({ error: 'query is required' }), {
