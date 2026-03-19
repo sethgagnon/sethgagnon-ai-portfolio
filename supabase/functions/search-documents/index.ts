@@ -24,6 +24,15 @@ Deno.serve(async (req) => {
       });
     }
 
+    if (query.length > 2000) {
+      return new Response(JSON.stringify({ error: 'Query must be under 2,000 characters.' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const match_count = Math.min(Math.max(1, Number(rawMatchCount) || 5), 20);
+
     // Generate embedding for query
     const embRes = await fetch('https://api.openai.com/v1/embeddings', {
       method: 'POST',
